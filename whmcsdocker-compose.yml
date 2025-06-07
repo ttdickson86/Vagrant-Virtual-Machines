@@ -1,0 +1,38 @@
+services:
+  mariadb:
+    image: mariadb:latest
+    restart: unless-stopped
+    environment:
+      - MARIADB_ROOT_PASSWORD=your_password
+      - MARIADB_DATABASE=your_database
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+#whmcsphpmyadmin
+################
+  whmcstestphpmyadmin:
+    image: phpmyadmin
+    restart: unless-stopped
+    ports:
+      - 8083:80
+    environment:
+      - PMA_ARBITRARY=1
+
+
+#whmcsinstance
+##############
+  whmcstestinstance:
+    container_name: WHMCStest-INSTANCE
+
+    ports:
+      - 82:80
+
+    stdin_open: true
+    image: chasim1982/whmcs:latest
+    volumes:
+      - /root/WHMCS-data:/var/www/whmcs
+    restart: unless-stopped
+networks: {} 
+
+volumes:
+  mariadb_data:
